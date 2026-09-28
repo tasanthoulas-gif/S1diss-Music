@@ -4,7 +4,8 @@ import { useCookieConsent } from "../components/cookie-consent";
 
 const SPOTIFY_URL = "https://open.spotify.com/artist/0kEr1Y5oPvtNtz9L4DLSBC";
 const APPLE_MUSIC_URL = "https://music.apple.com/gr/artist/s1diss/6785485694?l=el";
-const INSTAGRAM_URL = "https://instagram.com/s1diss";
+const INSTAGRAM_URL =
+  "https://www.instagram.com/s1diss.x?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==";
 
 
 const services = [
