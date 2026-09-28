@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mic2, SlidersHorizontal, Music4, Instagram } from "lucide-react";
+import { useCookieConsent } from "../components/cookie-consent";
 
 const SPOTIFY_URL = "https://open.spotify.com/artist/0kEr1Y5oPvtNtz9L4DLSBC";
 const APPLE_MUSIC_URL = "https://music.apple.com/gr/artist/s1diss/6785485694?l=el";
@@ -53,6 +54,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { hasExternalContentConsent, openSettings } = useCookieConsent();
+
   return (
     <main className="min-h-screen px-5 py-12">
       <div className="mx-auto w-full max-w-[520px]">
@@ -99,22 +102,33 @@ function Index() {
           Listen on Apple Music
         </a>
 
-        {/* Spotify embed */}
+        {/* Spotify embed — no third-party request before explicit consent. */}
         <section
           className="animate-fade-up mt-6 overflow-hidden rounded-2xl border border-border"
           style={{ animationDelay: "0.15s" }}
           aria-label="Spotify player"
         >
-          <iframe
-            title="S1dis on Spotify"
-            src="https://open.spotify.com/embed/artist/0kEr1Y5oPvtNtz9L4DLSBC?utm_source=generator"
-            width="100%"
-            height="352"
-            frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-            className="block w-full"
-          />
+          {hasExternalContentConsent ? (
+            <iframe
+              title="S1dis on Spotify"
+              src="https://open.spotify.com/embed/artist/0kEr1Y5oPvtNtz9L4DLSBC?utm_source=generator"
+              width="100%"
+              height="352"
+              frameBorder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+              className="block w-full"
+            />
+          ) : (
+            <div className="spotify-consent-placeholder">
+              <Music4 className="size-8 text-primary" aria-hidden />
+              <h2>Το Spotify player είναι απενεργοποιημένο</h2>
+              <p>Ενεργοποιήστε το «Εξωτερικό περιεχόμενο» για να φορτώσει το player από το Spotify.</p>
+              <button type="button" className="cookie-button cookie-button--primary" onClick={openSettings}>
+                Ρυθμίσεις Cookies
+              </button>
+            </div>
+          )}
         </section>
 
         {/* Services */}
@@ -174,7 +188,15 @@ function Index() {
         </a>
 
         <footer className="mt-10 pb-6 text-center text-[11px] uppercase tracking-[0.25em] text-muted-foreground/70">
-          © {new Date().getFullYear()} S1diss
+          <div>© {new Date().getFullYear()} S1diss</div>
+          <div className="mt-4 flex justify-center gap-4 normal-case tracking-normal">
+            <a href="/cookie-policy" className="footer-link">
+              Πολιτική Cookies
+            </a>
+            <button type="button" className="footer-link" onClick={openSettings}>
+              Ρυθμίσεις Cookies
+            </button>
+          </div>
         </footer>
 
       </div>
